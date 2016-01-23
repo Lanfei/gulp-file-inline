@@ -1,0 +1,14 @@
+.avatar {
+	width: 200px;
+	height: 200px;
+	display: inline-block;
+	background: url(../img/avatar.jpg);
+}
+
+.abs-url {
+	background: url('/path/to/image.jpg');
+}
+
+.with-protocol {
+	background: url("http://example.com/path/to/image.jpg");
+}
