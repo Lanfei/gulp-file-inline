@@ -5,5 +5,5 @@ gulp.task('default', function () {
 	return gulp
 		.src(['index.html'])
 		.pipe(fileInline())
-		.pipe(gulp.dest('../build'));
+		.pipe(gulp.dest('build'));
 });

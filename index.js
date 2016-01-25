@@ -20,27 +20,24 @@ const JS_SRC_PATTERN = / src=['"]?([^'"]+)['"]?/;
 
 const CSS_URL_PATTERN = /(url\(['"]?)([^'")]+)(['"]?\))/g;
 
-const CSS_INLINE_TAG = 'style';
-const JS_INLINE_TAG = 'script';
-
 var defOpts = {
 	css: {
 		tagPattern: CSS_TAG_PATTERN,
 		urlPattern: CSS_HREF_PATTERN,
-		inlineTag: CSS_INLINE_TAG,
+		tagParser: cssTagParser,
 		parser: cssParser,
 		minify: true
 	},
 	js: {
 		tagPattern: JS_TAG_PATTERN,
 		urlPattern: JS_SRC_PATTERN,
-		inlineTag: JS_INLINE_TAG,
+		tagParser: jsTagParser,
 		parser: jsParser,
 		minify: true
 	}
 };
 
-function inline(html, base, filter, tagPattern, urlPattern, inlineTag, minify, parser) {
+function inline(base, html, encoding, filter, tagPattern, urlPattern, tagParser, parser, minify) {
 	html = html.replace(tagPattern, function (tag) {
 		if (filter && !filter(tag)) {
 			return tag;
@@ -55,7 +52,7 @@ function inline(html, base, filter, tagPattern, urlPattern, inlineTag, minify, p
 				var filename = path.join(base, urlObj.pathname);
 				var relative = path.relative(base, filename);
 				if (fs.existsSync(filename) && fs.statSync(filename).isFile()) {
-					codes = parser(base, filename, fs.readFileSync(filename).toString(), minify);
+					codes = parser(base, filename, encoding, minify);
 					gutil.log('Inline:', gutil.colors.green(relative));
 				} else {
 					codes = '';
@@ -65,25 +62,16 @@ function inline(html, base, filter, tagPattern, urlPattern, inlineTag, minify, p
 			});
 		});
 		if (codes !== undefined) {
-			var openTag = '<' + inlineTag + attrCodes + '>';
-			var closeTag = '</' + inlineTag + '>';
-			tag = openTag + codes + closeTag;
+			tag = tagParser(codes, attrCodes);
 		}
 		return tag;
 	});
 	return html;
 }
 
-function jsParser(base, filename, source, minify) {
-	if (minify) {
-		return UglifyJS.minify(source, {fromString: true}).code;
-	} else {
-		return source;
-	}
-}
-
-function cssParser(base, filename, source, minify) {
+function cssParser(base, filename, encoding, minify) {
 	var dirname = path.dirname(filename);
+	var source = fs.readFileSync(filename).toString(encoding);
 	source = source.replace(CSS_URL_PATTERN, function (match, openCodes, urlStr, closeCodes) {
 		var urlObj = url.parse(urlStr);
 		if (urlObj.protocol || path.isAbsolute(urlStr)) {
@@ -98,8 +86,46 @@ function cssParser(base, filename, source, minify) {
 	}
 }
 
+function jsParser(base, filename, encoding, minify) {
+	var source = fs.readFileSync(filename).toString(encoding);
+	if (minify) {
+		return UglifyJS.minify(source, {fromString: true}).code;
+	} else {
+		return source;
+	}
+}
+
+function cssTagParser(codes, attrCodes) {
+	attrCodes = attrCodes.replace(' rel="stylesheet"', '');
+	return '<style' + attrCodes + '>' + codes + '</style>';
+}
+
+function jsTagParser(codes, attrCodes) {
+	attrCodes = attrCodes.replace(' type="text/javascript"', '');
+	return '<script' + attrCodes + '>' + codes + '</script>';
+}
+
+function merge(objA, objB) {
+	var target = {};
+	forEach(objA, function (item, key) {
+		target[key] = item;
+	});
+	forEach(objB, function (item, key) {
+		target[key] = item;
+	});
+	return target;
+}
+
+function forEach(obj, iterator) {
+	var keys = Object.keys(obj);
+	for (var i = 0, l = keys.length; i < l; ++i) {
+		var key = keys[i];
+		iterator.call(obj, obj[key], key);
+	}
+}
+
 function fileInline(opts) {
-	opts = opts || {};
+	opts = merge(defOpts, opts || {});
 
 	return through.obj(function (file, enc, cb) {
 		if (file.isNull()) {
@@ -109,24 +135,21 @@ function fileInline(opts) {
 		} else if (file.isBuffer()) {
 			var html = file.contents.toString();
 			var base = file.base;
-			var types = Object.keys(defOpts);
-			for (var i = 0, l = types.length; i < l; ++i) {
-				var type = types[i];
-				if (opts[type] === null) {
-					continue;
+			forEach(opts, function (opt, type) {
+				if (!opt) {
+					return;
 				}
-				var opt = opts[type] || {};
-				var defOpt = defOpts[type];
+				var defOpt = defOpts[type] || {};
 				html = inline(
-					html, base,
+					base, html, enc,
 					opt.filter,
 					opt.tagPattern || defOpt.tagPattern,
 					opt.urlPattern || defOpt.urlPattern,
-					opt.inlineTag || defOpt.inlineTag,
-					opt.minify || defOpt.minify,
-					opt.parser || defOpt.parser
+					opt.tagParser || defOpt.tagParser,
+					opt.parser || defOpt.parser,
+					opt.minify === undefined ? defOpt.minify : opt.minify
 				);
-			}
+			});
 			file.contents = new Buffer(html);
 			cb(null, file);
 		}
@@ -134,6 +157,11 @@ function fileInline(opts) {
 }
 
 exports = module.exports = fileInline;
-
+exports.CSS_TAG_PATTERN = CSS_TAG_PATTERN;
+exports.JS_TAG_PATTERN = JS_TAG_PATTERN;
+exports.CSS_HREF_PATTERN = CSS_HREF_PATTERN;
+exports.JS_SRC_PATTERN = JS_SRC_PATTERN;
+exports.cssTagParser = cssTagParser;
+exports.jsTagParser = jsTagParser;
 exports.cssParser = cssParser;
 exports.jsParser = jsParser;

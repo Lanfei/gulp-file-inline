@@ -13,10 +13,6 @@ describe('gulp-file-inline', function () {
 				var contents = file.contents.toString();
 				contents.indexOf('.avatar').should.above(0);
 				contents.indexOf('console.log("gulp-file-inline")').should.above(0);
-				contents.indexOf('url(img/avatar.jpg)').should.above(0);
-				contents.indexOf('url(/path/to/image.jpg)').should.above(0);
-				contents.indexOf('background:url(http://example.com/path/to/image.jpg)').should.above(0);
-				contents.indexOf('<link rel="stylesheet" href="http://example.com/css/style.css" class="absolute-url"/>').should.above(0);
 				cb();
 			}, function () {
 				done();
@@ -32,7 +28,6 @@ describe('gulp-file-inline', function () {
 				contents.indexOf('url(img/avatar.jpg)').should.above(0);
 				contents.indexOf('url(/path/to/image.jpg)').should.above(0);
 				contents.indexOf('background:url(http://example.com/path/to/image.jpg)').should.above(0);
-				contents.indexOf('<link rel="stylesheet" href="http://example.com/css/style.css" class="absolute-url"/>').should.above(0);
 				cb();
 			}, function () {
 				done();
