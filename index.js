@@ -53,10 +53,10 @@ function inline(base, html, encoding, filter, tagPattern, urlPattern, tagParser,
 				var relative = path.relative(base, filename);
 				if (fs.existsSync(filename) && fs.statSync(filename).isFile()) {
 					codes = parser(base, filename, encoding, minify);
-					gutil.log('Inline:', gutil.colors.green(relative));
+					gutil.log(PLUGIN_NAME + ':', 'Inline', gutil.colors.green(relative));
 				} else {
 					codes = '';
-					gutil.log('Missing:', gutil.colors.red(relative));
+					gutil.log(PLUGIN_NAME + ':', 'Missing', gutil.colors.red(relative));
 				}
 				return '';
 			});
