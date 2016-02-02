@@ -134,7 +134,7 @@ function fileInline(opts) {
 			cb(new gutil.PluginError(PLUGIN_NAME, 'Streaming not supported'));
 		} else if (file.isBuffer()) {
 			var html = file.contents.toString();
-			var base = file.base;
+			var base = path.dirname(file.path);
 			forEach(opts, function (opt, type) {
 				if (!opt) {
 					return;
