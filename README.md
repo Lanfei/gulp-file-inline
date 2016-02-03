@@ -50,7 +50,7 @@ gulp.task('default', function() {
 
 This is an example to inline images:
 
-```
+```js
 var fs = require('fs');
 var mime = require('mime');
 var gulp = require('gulp');
