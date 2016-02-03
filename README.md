@@ -94,6 +94,7 @@ Default:
 		urlPattern: fileInline.CSS_HREF_PATTERN,
 		tagParser: fileInline.cssTagParser,
 		parser: fileInline.cssParser,
+		filter: null,
 		minify: true
 	},
 	js: {
@@ -101,6 +102,7 @@ Default:
 		urlPattern: fileInline.JS_SRC_PATTERN,
 		tagParser: fileInline.jsTagParser,
 		parser: fileInline.jsParser,
+		filter: null,
 		minify: true
 	}
 }
