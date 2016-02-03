@@ -64,7 +64,7 @@ gulp.task('default', function () {
 				tagPattern: /<img[^>]* src=[^>]+>/g,
 				urlPattern: / src=['"]?([^'"]+)['"]?/,
 				tagParser: function (codes, attrCodes) {
-					return '<img' + attrCodes + ' src = "' + codes + '" > ';
+					return '<img' + attrCodes + ' src="' + codes + '">';
 				},
 				parser: function (base, filename, encoding, minify) {
 					var content = fs.readFileSync(filename).toString('base64');
