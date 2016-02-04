@@ -20,7 +20,7 @@ gulp.task('default', function() {
 	return gulp
 		.src('index.html')
 		.pipe(fileInline())
-		.pipe(gulp.dest('build'));
+		.pipe(gulp.dest('dist'));
 });
 ```
 
@@ -42,7 +42,7 @@ gulp.task('default', function() {
 				}
 			}
 		}))
-		.pipe(gulp.dest('build'));
+		.pipe(gulp.dest('dist'));
 });
 ```
 
@@ -73,7 +73,7 @@ gulp.task('default', function () {
 				}
 			}
 		}))
-		.pipe(gulp.dest('build'));
+		.pipe(gulp.dest('dist'));
 });
 ```
 
