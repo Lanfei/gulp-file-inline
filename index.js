@@ -37,7 +37,7 @@ var defOpts = {
 	}
 };
 
-function inline(base, html, encoding, filter, tagPattern, urlPattern, tagParser, parser, minify) {
+function inline(base, reference, html, encoding, filter, tagPattern, urlPattern, tagParser, parser, minify) {
 	html = html.replace(tagPattern, function (tag) {
 		if (filter && !filter(tag)) {
 			return tag;
@@ -53,7 +53,7 @@ function inline(base, html, encoding, filter, tagPattern, urlPattern, tagParser,
 				var relative = path.relative(base, filename);
 				if (fs.existsSync(filename) && fs.statSync(filename).isFile()) {
 					codes = parser(base, filename, encoding, minify);
-					gutil.log(PLUGIN_NAME + ':', 'Inline', gutil.colors.green(relative));
+					gutil.log(PLUGIN_NAME + ':', 'Inline', gutil.colors.green(relative), '->', gutil.colors.green(reference));
 				} else {
 					codes = '';
 					gutil.log(PLUGIN_NAME + ':', 'Missing', gutil.colors.red(relative));
@@ -133,15 +133,16 @@ function fileInline(opts) {
 		} else if (file.isStream()) {
 			cb(new gutil.PluginError(PLUGIN_NAME, 'Streaming not supported'));
 		} else if (file.isBuffer()) {
-			var html = file.contents.toString();
 			var base = path.dirname(file.path);
+			var html = file.contents.toString();
+			var reference = file.relative;
 			forEach(opts, function (opt, type) {
 				if (!opt) {
 					return;
 				}
 				var defOpt = defOpts[type] || {};
 				html = inline(
-					base, html, enc,
+					base, reference, html, enc,
 					opt.filter,
 					opt.tagPattern || defOpt.tagPattern,
 					opt.urlPattern || defOpt.urlPattern,
