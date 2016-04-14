@@ -10,13 +10,13 @@ var CleanCSS = require('clean-css');
 
 const PLUGIN_NAME = 'gulp-file-inline';
 
-const CSS_TAG_PATTERN = /<link[^>]* href=[^>]+>/g;
-const JS_TAG_PATTERN = /<script[^>]* src=[^>]+>(.|\n)*<\/script>/g;
+const CSS_TAG_PATTERN = /<link[^>]* href=[^>]+>/ig;
+const JS_TAG_PATTERN = /<script[^>]* src=[^>]+>(\s|\n)*<\/script>/ig;
 
 const ATTR_PATTERN = / [^>]+?(?=(\s*\/>|>))/;
 
-const CSS_HREF_PATTERN = / href=['"]?([^'"]+)['"]?/;
-const JS_SRC_PATTERN = / src=['"]?([^'"]+)['"]?/;
+const CSS_HREF_PATTERN = / href=['"]?([^'"]+)['"]?/i;
+const JS_SRC_PATTERN = / src=['"]?([^'"]+)['"]?/i;
 
 const CSS_URL_PATTERN = /(url\(['"]?)([^'")]+)(['"]?\))/g;
 
