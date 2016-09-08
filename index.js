@@ -8,17 +8,17 @@ var through = require('through2');
 var UglifyJS = require("uglify-js");
 var CleanCSS = require('clean-css');
 
-const PLUGIN_NAME = 'gulp-file-inline';
+var PLUGIN_NAME = 'gulp-file-inline';
 
-const CSS_TAG_PATTERN = /<link[^>]* href=[^>]+>/ig;
-const JS_TAG_PATTERN = /<script[^>]* src=[^>]+>(\s|\n)*<\/script>/ig;
+var CSS_TAG_PATTERN = /<link[^>]* href=[^>]+>/ig;
+var JS_TAG_PATTERN = /<script[^>]* src=[^>]+>(\s|\n)*<\/script>/ig;
 
-const ATTR_PATTERN = / [^>]+?(?=(\s*\/>|>))/;
+var ATTR_PATTERN = / [^>]+?(?=(\s*\/>|>))/;
 
-const CSS_HREF_PATTERN = / href=['"]?([^'"]+)['"]?/i;
-const JS_SRC_PATTERN = / src=['"]?([^'"]+)['"]?/i;
+var CSS_HREF_PATTERN = / href=['"]?([^'"]+)['"]?/i;
+var JS_SRC_PATTERN = / src=['"]?([^'"]+)['"]?/i;
 
-const CSS_URL_PATTERN = /(url\(['"]?)([^'")]+)(['"]?\))/g;
+var CSS_URL_PATTERN = /(url\(['"]?)([^'")]+)(['"]?\))/g;
 
 var defOpts = {
 	css: {
