@@ -1,6 +1,6 @@
 {
   "name": "gulp-file-inline",
-  "version": "1.3.6",
+  "version": "1.3.7",
   "description": "A gulp plugin to inline js/css files.",
   "main": "index.js",
   "scripts": {
