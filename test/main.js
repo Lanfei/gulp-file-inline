@@ -1,7 +1,7 @@
 var gulp = require('gulp');
 var should = require('should');
 var through = require('through2');
-var fileInline = require('../');
+var fileInline = require('..');
 
 describe('gulp-file-inline', function () {
 

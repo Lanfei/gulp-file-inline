@@ -89,7 +89,7 @@ function cssParser(base, filename, encoding, minify) {
 function jsParser(base, filename, encoding, minify) {
 	var source = fs.readFileSync(filename).toString(encoding);
 	if (minify) {
-		return UglifyJS.minify(source, {fromString: true}).code;
+		return UglifyJS.minify(source).code;
 	} else {
 		return source;
 	}
