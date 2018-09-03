@@ -3,10 +3,12 @@
 var fs = require('fs');
 var url = require('url');
 var path = require('path');
-var gutil = require('gulp-util');
+var log = require('fancy-log');
 var through = require('through2');
 var UglifyJS = require("uglify-js");
 var CleanCSS = require('clean-css');
+var colors = require('ansi-colors');
+var PluginError = require('plugin-error');
 
 var PLUGIN_NAME = 'gulp-file-inline';
 
@@ -53,10 +55,10 @@ function inline(base, reference, html, encoding, filter, tagPattern, urlPattern,
 				var relative = path.relative(base, filename);
 				if (fs.existsSync(filename) && fs.statSync(filename).isFile()) {
 					codes = parser(base, filename, encoding, minify);
-					gutil.log(PLUGIN_NAME + ':', 'Inline', gutil.colors.green(relative), '->', gutil.colors.green(reference));
+					log(PLUGIN_NAME + ':', 'Inline', colors.green(relative), '->', colors.green(reference));
 				} else {
 					codes = '';
-					gutil.log(PLUGIN_NAME + ':', 'Missing', gutil.colors.red(relative));
+					log(PLUGIN_NAME + ':', 'Missing', colors.red(relative));
 				}
 				return '';
 			});
@@ -131,7 +133,7 @@ function fileInline(opts) {
 		if (file.isNull()) {
 			return cb();
 		} else if (file.isStream()) {
-			cb(new gutil.PluginError(PLUGIN_NAME, 'Streaming not supported'));
+			cb(new PluginError(PLUGIN_NAME, 'Streaming not supported'));
 		} else if (file.isBuffer()) {
 			var base = path.dirname(file.path);
 			var html = file.contents.toString();
@@ -151,7 +153,7 @@ function fileInline(opts) {
 					opt.minify === undefined ? defOpt.minify : opt.minify
 				);
 			});
-			file.contents = new Buffer(html);
+			file.contents = Buffer.from(html);
 			cb(null, file);
 		}
 	});
