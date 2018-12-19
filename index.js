@@ -82,7 +82,11 @@ function cssParser(base, filename, encoding, minify) {
 		return openCodes + path.relative(base, path.join(dirname, urlStr)) + closeCodes;
 	});
 	if (minify) {
-		return new CleanCSS(minify).minify(source).styles;
+		var result = new CleanCSS(minify).minify(source);
+		var error = result['errors'][0] || result['warnings'][0];
+		log(PLUGIN_NAME + ':', 'Minify', colors.green(path.relative(base, filename)));
+		throwIfError(error);
+		return result['styles'];
 	} else {
 		return source;
 	}
@@ -91,7 +95,11 @@ function cssParser(base, filename, encoding, minify) {
 function jsParser(base, filename, encoding, minify) {
 	var source = fs.readFileSync(filename).toString(encoding);
 	if (minify) {
-		return UglifyJS.minify(source, minify).code;
+		var result = UglifyJS.minify(source);
+		var error = result['error'];
+		log(PLUGIN_NAME + ':', 'Minify', colors.green(path.relative(base, filename)));
+		throwIfError(error);
+		return result['code'];
 	} else {
 		return source;
 	}
@@ -105,6 +113,17 @@ function cssTagParser(codes, attrCodes) {
 function jsTagParser(codes, attrCodes) {
 	attrCodes = attrCodes.replace(' type="text/javascript"', '');
 	return '<script' + attrCodes + '>' + codes + '</script>';
+}
+
+function throwIfError(error) {
+	if (!error) {
+		return;
+	}
+	if (error instanceof Error) {
+		throw error;
+	} else {
+		throw new Error(error);
+	}
 }
 
 function merge(objA, objB) {
