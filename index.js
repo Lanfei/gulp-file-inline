@@ -28,7 +28,10 @@ var defOpts = {
 		urlPattern: CSS_HREF_PATTERN,
 		tagParser: cssTagParser,
 		parser: cssParser,
-		minify: true
+		minify: true,
+		filter: function (tag) {
+			return /\srel\s*=\s*["']?stylesheet["']?/.test(tag);
+		}
 	},
 	js: {
 		tagPattern: JS_TAG_PATTERN,
@@ -164,7 +167,7 @@ function fileInline(opts) {
 				var defOpt = defOpts[type] || {};
 				html = inline(
 					base, reference, html, enc,
-					opt.filter,
+					opt.filter || defOpt.filter,
 					opt.tagPattern || defOpt.tagPattern,
 					opt.urlPattern || defOpt.urlPattern,
 					opt.tagParser || defOpt.tagParser,
