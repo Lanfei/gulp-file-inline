@@ -82,7 +82,7 @@ function cssParser(base, filename, encoding, minify) {
 		return openCodes + path.relative(base, path.join(dirname, urlStr)) + closeCodes;
 	});
 	if (minify) {
-		return new CleanCSS().minify(source).styles;
+		return new CleanCSS(minify).minify(source).styles;
 	} else {
 		return source;
 	}
@@ -91,7 +91,7 @@ function cssParser(base, filename, encoding, minify) {
 function jsParser(base, filename, encoding, minify) {
 	var source = fs.readFileSync(filename).toString(encoding);
 	if (minify) {
-		return UglifyJS.minify(source).code;
+		return UglifyJS.minify(source, minify).code;
 	} else {
 		return source;
 	}

@@ -95,7 +95,7 @@ Default:
 		tagParser: fileInline.cssTagParser,
 		parser: fileInline.cssParser,
 		filter: null,
-		minify: true
+		minify: true //@see https://www.npmjs.com/package/clean-css#constructor-options
 	},
 	js: {
 		tagPattern: fileInline.JS_TAG_PATTERN,
@@ -103,7 +103,7 @@ Default:
 		tagParser: fileInline.jsTagParser,
 		parser: fileInline.jsParser,
 		filter: null,
-		minify: true
+		minify: true //@see https://www.npmjs.com/package/uglify-js#minify-options
 	}
 }
 ```
