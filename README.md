@@ -68,7 +68,7 @@ gulp.task('default', function () {
 				},
 				parser: function (base, filename, encoding, minify) {
 					var content = fs.readFileSync(filename).toString('base64');
-					var contentType = mime.lookup(filename);
+					var contentType = mime.getType(filename);
 					return 'data:' + contentType + ';base64,' + content;
 				}
 			}
