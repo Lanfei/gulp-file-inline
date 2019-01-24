@@ -1,4 +1,4 @@
-# gulp-file-inline [![NPM version][npm-image]][npm-url]
+# gulp-file-inline · [![Build Status][build-image]][build-url] [![Coverage Status][coverage-image]][coverage-url] [![Version][version-image]][version-url] [![License][license-image]][license-url]
 
 > A gulp plugin to inline link, script or other tags into the file.
 
@@ -108,5 +108,11 @@ Default:
 }
 ```
 
-[npm-url]: https://npmjs.org/package/gulp-file-inline
-[npm-image]: https://badge.fury.io/js/gulp-file-inline.svg
+[build-url]: https://circleci.com/gh/Lanfei/gulp-file-inline
+[build-image]: https://img.shields.io/circleci/project/github/Lanfei/gulp-file-inline.svg
+[coverage-url]: https://codecov.io/github/Lanfei/gulp-file-inline
+[coverage-image]: https://img.shields.io/codecov/c/github/Lanfei/gulp-file-inline.svg
+[version-url]: https://npmjs.org/package/gulp-file-inline
+[version-image]: https://img.shields.io/npm/v/gulp-file-inline.svg
+[license-url]: https://github.com/Lanfei/gulp-file-inline/blob/master/LICENSE
+[license-image]: https://img.shields.io/npm/l/gulp-file-inline.svg

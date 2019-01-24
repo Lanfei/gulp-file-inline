@@ -123,29 +123,21 @@ function throwIfError(error) {
 		return;
 	}
 	if (error instanceof Error) {
-		throw error;
+		throw new PluginError(PLUGIN_NAME, error.message);
 	} else {
-		throw new Error(error);
+		throw new PluginError(PLUGIN_NAME, error);
 	}
 }
 
 function merge(objA, objB) {
 	var target = {};
-	forEach(objA, function (item, key) {
-		target[key] = item;
+	Object.keys(objA).forEach(function (key) {
+		target[key] = objA[key];
 	});
-	forEach(objB, function (item, key) {
-		target[key] = item;
+	Object.keys(objB).forEach(function (key) {
+		target[key] = objB[key];
 	});
 	return target;
-}
-
-function forEach(obj, iterator) {
-	var keys = Object.keys(obj);
-	for (var i = 0, l = keys.length; i < l; ++i) {
-		var key = keys[i];
-		iterator.call(obj, obj[key], key);
-	}
 }
 
 function fileInline(opts) {
@@ -157,26 +149,35 @@ function fileInline(opts) {
 		} else if (file.isStream()) {
 			cb(new PluginError(PLUGIN_NAME, 'Streaming not supported'));
 		} else if (file.isBuffer()) {
+			var err = null;
 			var base = path.dirname(file.path);
 			var html = file.contents.toString();
 			var reference = file.relative;
-			forEach(opts, function (opt, type) {
+			var types = Object.keys(opts);
+			for (var i = 0, l = types.length; i < l; ++i) {
+				var type = types[i];
+				var opt = opts[type];
 				if (!opt) {
-					return;
+					continue;
 				}
 				var defOpt = defOpts[type] || {};
-				html = inline(
-					base, reference, html, enc,
-					opt.filter || defOpt.filter,
-					opt.tagPattern || defOpt.tagPattern,
-					opt.urlPattern || defOpt.urlPattern,
-					opt.tagParser || defOpt.tagParser,
-					opt.parser || defOpt.parser,
-					opt.minify === undefined ? defOpt.minify : opt.minify
-				);
-			});
+				try {
+					html = inline(
+						base, reference, html, enc,
+						opt.filter || defOpt.filter,
+						opt.tagPattern || defOpt.tagPattern,
+						opt.urlPattern || defOpt.urlPattern,
+						opt.tagParser || defOpt.tagParser,
+						opt.parser || defOpt.parser,
+						opt.minify !== false
+					);
+				} catch (e) {
+					err = e;
+					break;
+				}
+			}
 			file.contents = Buffer.from(html);
-			cb(null, file);
+			cb(err, file);
 		}
 	});
 }
