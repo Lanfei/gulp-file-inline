@@ -7,7 +7,7 @@
 First, install `gulp-file-inline` as a development dependency:
 
 ```shell
-$ npm install --save-dev gulp-file-inline
+npm install --save-dev gulp-file-inline
 ```
 
 Then, add it to your `gulpfile.js`:
