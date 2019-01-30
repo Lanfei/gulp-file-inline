@@ -1,8 +1,10 @@
+'use strict';
+
 var fs = require('fs');
 var mime = require('mime');
 var gulp = require('gulp');
-var expect = require('expect.js');
 var through = require('through2');
+var assert = require('chai').assert;
 var fileInline = require('..');
 
 describe('gulp-file-inline', function () {
@@ -13,8 +15,8 @@ describe('gulp-file-inline', function () {
 			.pipe(fileInline())
 			.pipe(through.obj(function (file, enc, cb) {
 				var contents = file.contents.toString();
-				expect(contents).to.contain('.avatar');
-				expect(contents).to.contain('console.log("gulp-file-inline")');
+				assert.include(contents, '.avatar');
+				assert.include(contents, 'console.log("gulp-file-inline")');
 				cb();
 			}, function () {
 				done();
@@ -27,9 +29,9 @@ describe('gulp-file-inline', function () {
 			.pipe(fileInline())
 			.pipe(through.obj(function (file, enc, cb) {
 				var contents = file.contents.toString();
-				expect(contents).to.contain('url(img/avatar.jpg)');
-				expect(contents).to.contain('url(/path/to/image.jpg)');
-				expect(contents).to.contain('background:url(http://example.com/path/to/image.jpg)');
+				assert.include(contents, 'url(img/avatar.jpg)');
+				assert.include(contents, 'url(/path/to/image.jpg)');
+				assert.include(contents, 'background:url(http://example.com/path/to/image.jpg)');
 				cb();
 			}, function () {
 				done();
@@ -42,7 +44,7 @@ describe('gulp-file-inline', function () {
 			.pipe(fileInline())
 			.pipe(through.obj(function (file, enc, cb) {
 				var contents = file.contents.toString();
-				expect(contents).to.contain('<link rel="stylesheet" href="http://example.com/css/style.css" class="absolute-url">');
+				assert.include(contents, '<link rel="stylesheet" href="http://example.com/css/style.css" class="absolute-url">');
 				cb();
 			}, function () {
 				done();
@@ -55,8 +57,8 @@ describe('gulp-file-inline', function () {
 			.pipe(fileInline({css: {minify: false}, js: {minify: false}}))
 			.pipe(through.obj(function (file, enc, cb) {
 				var contents = file.contents.toString();
-				expect(contents).to.contain('\twidth:');
-				expect(contents).to.contain('\tconsole');
+				assert.include(contents, '\twidth:');
+				assert.include(contents, '\tconsole');
 				cb();
 			}, function () {
 				done();
@@ -69,8 +71,8 @@ describe('gulp-file-inline', function () {
 			.pipe(fileInline({css: null}))
 			.pipe(through.obj(function (file, enc, cb) {
 				var contents = file.contents.toString();
-				expect(contents).to.not.contain('.avatar');
-				expect(contents).to.contain('console.log("gulp-file-inline")');
+				assert.notInclude(contents, '.avatar');
+				assert.include(contents, 'console.log("gulp-file-inline")');
 				cb();
 			}, function () {
 				done();
@@ -82,7 +84,7 @@ describe('gulp-file-inline', function () {
 			.src('test/fixtures/error.html')
 			.pipe(fileInline())
 			.on('error', function (err) {
-				expect(err).to.be.an(Error);
+				assert.instanceOf(err, Error);
 				done();
 			});
 	});
@@ -106,7 +108,7 @@ describe('gulp-file-inline', function () {
 			}))
 			.pipe(through.obj(function (file, enc, cb) {
 				var contents = file.contents.toString();
-				expect(contents).to.contain('<img alt="avatar" src="data:image/jpeg;base64,');
+				assert.include(contents, '<img alt="avatar" src="data:image/jpeg;base64,');
 				cb();
 			}, function () {
 				done();

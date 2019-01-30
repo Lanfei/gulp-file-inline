@@ -1,4 +1,11 @@
-# gulp-file-inline · [![Build Status][build-image]][build-url] [![Coverage Status][coverage-image]][coverage-url] [![Version][version-image]][version-url] [![License][license-image]][license-url]
+# gulp-file-inline
+
+[![Build Status][build-image]][build-url]
+[![Coverage Status][coverage-image]][coverage-url]
+[![Version][version-image]][version-url]
+[![License][license-image]][license-url]
+[![Dependencies][dep-image]][dep-url]
+[![DevDependencies][dev-dep-image]][dev-dep-url]
 
 > A gulp plugin to inline link, script or other tags into the file.
 
@@ -116,3 +123,7 @@ Default:
 [version-image]: https://img.shields.io/npm/v/gulp-file-inline.svg
 [license-url]: https://github.com/Lanfei/gulp-file-inline/blob/master/LICENSE
 [license-image]: https://img.shields.io/npm/l/gulp-file-inline.svg
+[dep-url]: https://david-dm.org/Lanfei/gulp-file-inline
+[dep-image]: https://david-dm.org/Lanfei/gulp-file-inline/status.svg
+[dev-dep-url]: https://david-dm.org/Lanfei/gulp-file-inline?type=dev
+[dev-dep-image]: https://david-dm.org/Lanfei/gulp-file-inline/dev-status.svg
