@@ -1,14 +1,14 @@
 {
   "name": "gulp-file-inline",
-  "version": "2.2.2",
+  "version": "2.2.3",
   "description": "A gulp plugin to inline js/css files.",
   "main": "index.js",
   "files": [
     "index.js"
   ],
   "scripts": {
-    "test": "mocha test/index.js",
-    "codecov": "istanbul cover _mocha test/index.js && codecov",
+    "test": "mocha test/*.js",
+    "coverage": "nyc npm test && nyc report --reporter=text-lcov | coveralls",
     "prepublish": "npm run test"
   },
   "repository": {
@@ -38,10 +38,10 @@
   },
   "devDependencies": {
     "chai": "^4.2.0",
-    "codecov": "^3.1.0",
+    "coveralls": "^3.0.2",
     "gulp": "^4.0.0",
-    "istanbul": "^0.4.5",
     "mime": "^2.4.0",
-    "mocha": "^5.2.0"
+    "mocha": "^5.2.0",
+    "nyc": "^13.1.0"
   }
 }

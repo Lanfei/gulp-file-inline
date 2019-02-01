@@ -117,8 +117,8 @@ Default:
 
 [build-url]: https://circleci.com/gh/Lanfei/gulp-file-inline
 [build-image]: https://img.shields.io/circleci/project/github/Lanfei/gulp-file-inline.svg
-[coverage-url]: https://codecov.io/github/Lanfei/gulp-file-inline
-[coverage-image]: https://img.shields.io/codecov/c/github/Lanfei/gulp-file-inline.svg
+[coverage-url]: https://coveralls.io/github/Lanfei/gulp-file-inline
+[coverage-image]: https://coveralls.io/repos/github/Lanfei/gulp-file-inline/badge.svg
 [version-url]: https://npmjs.org/package/gulp-file-inline
 [version-image]: https://img.shields.io/npm/v/gulp-file-inline.svg
 [license-url]: https://github.com/Lanfei/gulp-file-inline/blob/master/LICENSE
